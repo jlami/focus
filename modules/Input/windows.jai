@@ -30,6 +30,10 @@ get_key_code :: (wParam: WPARAM, extended := false) -> Key_Code {
         return MOUSE_BUTTON_MIDDLE;
     if wParam == VK_RBUTTON
         return MOUSE_BUTTON_RIGHT;
+    if wParam == VK_XBUTTON1
+        return MOUSE_BUTTON_4;
+    if wParam == VK_XBUTTON2
+        return MOUSE_BUTTON_5;
 
     if wParam == VK_SPACE   return xx 32;
 
@@ -299,6 +303,12 @@ MyWindowProc :: (hwnd: HWND, message: u32,
          case WM_MBUTTONUP;
             maybe_send_vkey_event(VK_MBUTTON, message == WM_MBUTTONDOWN);
             if message == WM_MBUTTONDOWN SetCapture(hwnd); else ReleaseCapture();
+
+         case WM_XBUTTONDOWN; #through;
+         case WM_XBUTTONUP;
+            vk := VK_XBUTTON1 + (wParam >> 16) - 1;
+            maybe_send_vkey_event(vk, message == WM_XBUTTONDOWN);
+            if message == WM_XBUTTONDOWN SetCapture(hwnd); else ReleaseCapture();
 
 
           case WM_MOUSEMOVE;
