@@ -124,6 +124,8 @@ build_error_index := -1;
 go_to_next_build_error :: () {
     if !build_errors.count {
         //TODO: show message that there are no errors?
+        #if DEBUG_BUILD_ERRORS log("No errors");
+        
         return;
     }
     
